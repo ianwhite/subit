@@ -1,0 +1,5 @@
+= Subit
+
+Ruby lib for performing substitutions on text.
+
+Includes a DSL for specifying sets of rules.
