@@ -93,7 +93,7 @@ describe "@content is 'I search and search', " do
         @rule = Subit::Rule.new('search') {|match| raise 'Boom'}
       end
       
-      context "when Subit.raise_parse_errors? true" do
+      context "(Subit.raise_parse_errors? is TRUE)" do
         before do
           Subit.stub!(:raise_parse_errors?).and_return(true)
         end
@@ -103,7 +103,7 @@ describe "@content is 'I search and search', " do
         end
       end
       
-      context "when Subit.raise_parse_errors? false" do
+      context "(Subit.raise_parse_errors? is FALSE)" do
         before do
           Subit.stub!(:raise_parse_errors?).and_return(false)
         end
