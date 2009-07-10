@@ -17,7 +17,7 @@ module Subit
       options = args.dup.extract_options!
       if original = options.delete(:original)
         @rule_for_original = if original.is_a?(Subit::Rule)
-          rule
+          original
         else
           self.class.new(search, original)
         end
