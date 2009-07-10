@@ -1,5 +1,43 @@
 = Subit
 
-Ruby lib for performing substitutions on text.
+Simple ruby lib for performing substitutions on text.
 
 Includes a DSL for specifying sets of rules.
+
+Uses include pre or post parsing textile to provide custom rules.
+
+  subit = Subit.rules do |p|
+  
+    h.sub "init", "isn't it", :replace! => "isn't it"
+  
+    p.rules :html do |h|
+      h.sub '£', '&pound;'
+      h.sub '(euro)', '&#8364;'
+      h.sub '/foo\d/, 'bar$1'
+      h.sub /#(\d+)/ do |ticket|
+        ticket_path(ticket)
+      end
+      h.sub /Product\((\w+)\)/,
+        :replace => lambda {|name| product_path(name) },
+        :replace! => lambda {|name| "Product(#{Product.find_by_name(name).id}-#{name})"}
+    end
+    
+  end
+
+  # parses using root rules
+  subit.parse("A string")
+
+  # parses using root, and :html rules
+  subit.parse("A string", :html)
+  
+  # parses using root, :html, :metric, and {:html, :metric} rules
+  subit.parse("A string", :html, :metric)
+  
+  # to parse using only {:html, :metric} rules
+  subit[:html, :metric].parse("A string")
+  
+  # you can pass an object where blocks will be eval'd
+  subit.parse("A string", :html, :eval => @some_object)
+  
+  # or you can set the eval context on the subit object
+  subit.eval_context = @some_object
