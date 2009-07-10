@@ -33,8 +33,8 @@ module Subit
         matchdata.to_a.each_with_index {|match, i| result.gsub!("$#{i}", match)}
         result
       when Proc
-        args = matchdata
-        args += options if (matchdata.size < replacement.arity || replacement.arity < 0)
+        args = matchdata.to_a
+        args += [options] if (args.size < replacement.arity || replacement.arity < 0)
         (options[:eval] || self).instance_exec(*args, &replacement)
       else
         replace(replacement, matchdata, options)

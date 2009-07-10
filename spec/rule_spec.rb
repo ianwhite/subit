@@ -67,5 +67,21 @@ describe "@content is 'I search and search', " do
         @content.should == 'I SEARCH and SEARCH'
       end
     end
+    
+    describe ".new('search') {|match, options| \"\#{match}\#{options[:thing]}\"}" do
+      before { @rule = Subit::Rule.new('search') {|match, options| "#{self.class.name}#{options[:thing]}"} }
+      
+      it "#parse(@content) should == 'I Subit::Rule and Subit::Rule'" do
+        @rule.parse(@content).should == "I Subit::Rule and Subit::Rule"
+      end
+
+      it "#parse(@content, :thing => '!') should == 'I Subit::Rule! and Subit::Rule!'" do
+        @rule.parse(@content, :thing => '!').should == "I Subit::Rule! and Subit::Rule!"
+      end
+      
+      it "#parse(@content, :eval => 'a string') should == 'I String and String'" do
+        @rule.parse(@content, :eval => 'a string').should == "I String and String"
+      end
+    end
   end
 end
