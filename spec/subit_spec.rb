@@ -9,6 +9,21 @@ describe Subit do
     Subit.rules.should be_instance_of(Subit::Rules)
   end
   
+  describe "(errors)" do
+    before { @old = Subit.raise_parse_errors? }
+
+    after { Subit.raise_parse_errors = @old }
+    
+    it "should default to not be raise parse errors" do
+      Subit.should_not be_raise_parse_errors
+    end
+    
+    it "should allow setting of raise parse errors" do
+      Subit.raise_parse_errors = true
+      Subit.should be_raise_parse_errors
+    end
+  end
+  
   describe ".logger" do
     before do
       Rails = mock("Rails") unless defined?(Rails)

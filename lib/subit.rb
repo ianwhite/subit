@@ -1,5 +1,6 @@
 require 'set'
 require 'logger'
+require 'active_support'
 require 'subit/rule'
 require 'subit/rules'
 require 'subit/version'
@@ -17,5 +18,13 @@ module Subit
 
   def logger=(logger)
     @logger = logger
+  end
+  
+  def raise_parse_errors?
+    @raise_parse_errors ? true : false
+  end
+  
+  def raise_parse_errors=(value)
+    @raise_parse_errors = value
   end
 end

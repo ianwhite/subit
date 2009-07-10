@@ -55,7 +55,9 @@ describe "@content is 'I search and search', " do
     end
     
     describe ".new('search', :replace => '?', :replace! => 'SEARCH')" do
-      before { @rule = Subit::Rule.new('search', :replace => '?', :replace! => 'SEARCH') }
+      before do
+        @rule = Subit::Rule.new('search', :replace => '?', :replace! => 'SEARCH')
+      end
       
       it "#parse(@content) should return 'I ? and ?', but not modify @content" do
         @rule.parse(@content).should == 'I ? and ?'
@@ -68,19 +70,49 @@ describe "@content is 'I search and search', " do
       end
     end
     
-    describe ".new('search') {|match, options| \"\#{match}\#{options[:thing]}\"}" do
-      before { @rule = Subit::Rule.new('search') {|match, options| "#{self.class.name}#{options[:thing]}"} }
+    describe ".new('search') {|match, options| \"\#{self.class == String ? 'String' : 'NOT'}\#{options[:thing]}\"}" do
+      before do
+        @rule = Subit::Rule.new('search') {|match, options| "#{self.class == String ? 'String' : 'NOT'}#{options[:thing]}"}
+      end
       
-      it "#parse(@content) should == 'I Subit::Rule and Subit::Rule'" do
-        @rule.parse(@content).should == "I Subit::Rule and Subit::Rule"
+      it "#parse(@content) should == 'I NOT and NOT'" do
+        @rule.parse(@content).should == "I NOT and NOT"
       end
 
-      it "#parse(@content, :thing => '!') should == 'I Subit::Rule! and Subit::Rule!'" do
-        @rule.parse(@content, :thing => '!').should == "I Subit::Rule! and Subit::Rule!"
+      it "#parse(@content, :thing => '!') should == 'I NOT! and NOT!'" do
+        @rule.parse(@content, :thing => '!').should == "I NOT! and NOT!"
       end
       
-      it "#parse(@content, :eval => 'a string') should == 'I String and String'" do
-        @rule.parse(@content, :eval => 'a string').should == "I String and String"
+      it "#parse(@content, :exec => 'a string') should == 'I String and String'" do
+        @rule.parse(@content, :exec => 'a string').should == "I String and String"
+      end
+    end
+    
+    describe ".new('search') {|match| raise 'Boom'}" do
+      before do
+        @rule = Subit::Rule.new('search') {|match| raise 'Boom'}
+      end
+      
+      context "when Subit.raise_parse_errors? true" do
+        before do
+          Subit.stub!(:raise_parse_errors?).and_return(true)
+        end
+        
+        it "#parse(@content) should raise an error" do
+          lambda { @rule.parse(@content) }.should raise_error("Boom")
+        end
+      end
+      
+      context "when Subit.raise_parse_errors? false" do
+        before do
+          Subit.stub!(:raise_parse_errors?).and_return(false)
+        end
+        
+        it "#parse(@content) send two warnings to the logger" do
+          Subit.stub!(:logger).and_return(logger = mock)
+          logger.should_receive(:warn).with("[Subit] #{@rule.inspect} with: #<MatchData \"search\"> got exception: #<RuntimeError: Boom>").twice
+          @rule.parse(@content)
+        end
       end
     end
   end
