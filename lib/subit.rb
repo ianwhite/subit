@@ -2,8 +2,11 @@ require 'set'
 require 'logger'
 require 'active_support'
 require 'subit/rule'
+require 'subit/rule_for_original'
 require 'subit/rules'
 require 'subit/version'
+
+Subit::Rule.send :include, Subit::RuleForOriginal
 
 module Subit
   extend self

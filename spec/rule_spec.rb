@@ -54,22 +54,6 @@ describe "@content is 'I search and search', " do
       it_should_behave_like "Rule with search: /[ae]/, replace: '[$0]'"
     end
     
-    describe ".new('search', :replace => '?', :replace! => 'SEARCH')" do
-      before do
-        @rule = Subit::Rule.new('search', :replace => '?', :replace! => 'SEARCH')
-      end
-      
-      it "#parse(@content) should return 'I ? and ?', but not modify @content" do
-        @rule.parse(@content).should == 'I ? and ?'
-        @content.should == 'I search and search'
-      end
-      
-      it "#parse!(@content) should return 'I ? and ?', and @content be 'I SEARCH and SEARCH'" do
-        @rule.parse!(@content).should == 'I ? and ?'
-        @content.should == 'I SEARCH and SEARCH'
-      end
-    end
-    
     describe ".new('search') {|match, options| \"\#{self.class == String ? 'String' : 'NOT'}\#{options[:thing]}\"}" do
       before do
         @rule = Subit::Rule.new('search') {|match, options| "#{self.class == String ? 'String' : 'NOT'}#{options[:thing]}"}
@@ -108,9 +92,9 @@ describe "@content is 'I search and search', " do
           Subit.stub!(:raise_parse_errors?).and_return(false)
         end
         
-        it "#parse(@content) send two warnings to the logger" do
+        it "#parse(@content) send two errors to the logger" do
           Subit.stub!(:logger).and_return(logger = mock)
-          logger.should_receive(:warn).with("[Subit] #{@rule.inspect} with: #<MatchData \"search\"> got exception: #<RuntimeError: Boom>").twice
+          logger.should_receive(:error).with("[Subit] #{@rule.inspect} with: #<MatchData \"search\"> got exception: #<RuntimeError: Boom>").twice
           @rule.parse(@content)
         end
       end
