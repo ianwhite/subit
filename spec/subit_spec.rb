@@ -57,7 +57,7 @@ describe Subit do
         Subit.rule_class(:foo).should == Subit::Foo
       end
       
-      it ".rule_class(:foo) should return Subit::Foo" do
+      it ".rule_class('foo') should return Subit::Foo" do
         Subit.rule_class('foo').should == Subit::Foo
       end
       
