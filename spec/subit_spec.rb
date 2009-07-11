@@ -24,6 +24,49 @@ describe Subit do
     end
   end
   
+  describe ".rule_classes" do
+    after do
+      Subit.rule_classes.clear
+    end
+    
+    it "should default to {}" do
+      Subit.rule_classes.should == {}
+    end
+    
+    it ".register_rule(klass) should result in {'klass' => klass}" do
+      Subit.register_rule(Integer)
+      Subit.rule_classes.should == {'integer' => Integer}
+    end
+    
+    it ".register_rule(klass, name) should result in {'name' => klass}" do
+      Subit.register_rule(Integer, 'foo')
+      Subit.rule_classes.should == {'foo' => Integer}
+    end
+    
+    describe ".regsiter_rule(Subit::Foo)" do
+      before do
+        module Subit; class Foo; end; end
+        Subit.register_rule(Subit::Foo)
+      end
+      
+      it "should result in {'foo' => Subit::Foo}" do
+        Subit.rule_classes.should == {'foo' => Subit::Foo}
+      end
+      
+      it ".rule_class(:foo) should return Subit::Foo" do
+        Subit.rule_class(:foo).should == Subit::Foo
+      end
+      
+      it ".rule_class(:foo) should return Subit::Foo" do
+        Subit.rule_class('foo').should == Subit::Foo
+      end
+      
+      it ".rule_class(:bar) should non true" do
+        (Subit.rule_class(:bar) ? true : false).should == false
+      end
+    end
+  end
+  
   describe ".logger" do
     before do
       Rails = mock("Rails") unless defined?(Rails)

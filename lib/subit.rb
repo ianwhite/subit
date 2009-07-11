@@ -30,4 +30,16 @@ module Subit
   def raise_parse_errors=(value)
     @raise_parse_errors = value
   end
+  
+  def rule_classes
+    @rule_classes ||= {}
+  end
+  
+  def rule_class(symbol)
+    rule_classes[symbol.to_s]
+  end
+  
+  def register_rule(klass, name = klass.name.demodulize.underscore)
+    rule_classes[name] = klass
+  end
 end
