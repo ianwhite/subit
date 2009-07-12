@@ -4,9 +4,9 @@ Simple ruby lib for performing substitutions on text.
 
 The aims are:
 
- * easy DSL for rule specification
- * be able to specify sets of rules for different types of input
- * be able to specify additional rules for replacing content in the original text
+* easy DSL for rule specification
+* be able to specify sets of rules for different types of input
+* be able to specify additional rules for replacing content in the original text
  
 Uses include pre or post parsing textile to provide custom rules.
 
@@ -14,7 +14,7 @@ Uses include pre or post parsing textile to provide custom rules.
 
   subit = Subit.define do |p|
   
-    h.sub "init", "isn't it", :replace! => "isn't it"
+    h.rule "init", "isn't it", :replace! => "isn't it"
   
     p.define :html do |h|
       h.rule '£', '&pound;'
@@ -43,11 +43,10 @@ Uses include pre or post parsing textile to provide custom rules.
   subit[:html, :metric].parse("A string")
   
   # you can pass an object where blocks will be eval'd
-  subit.parse("A string", :html, :eval => @some_object)
+  subit.parse("A string", :html, :exec => @some_object)
   
   # or you can set the eval context on the subit object
   subit.eval_context = @some_object
-  
   
 == Caveats
 
