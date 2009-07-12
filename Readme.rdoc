@@ -6,11 +6,11 @@ Includes a DSL for specifying sets of rules.
 
 Uses include pre or post parsing textile to provide custom rules.
 
-  subit = Subit.rules do |p|
+  subit = Subit.define do |p|
   
     h.sub "init", "isn't it", :replace! => "isn't it"
   
-    p.rules :html do |h|
+    p.define :html do |h|
       h.rule '£', '&pound;'
       h.rule '(euro)', '&#8364;'
       h.rule '/foo\d/, 'bar$1'

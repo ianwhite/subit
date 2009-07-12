@@ -1,5 +1,7 @@
 module Subit
   class Rule
+    Subit.register_rule(self)
+    
     delegate :logger, :raise_parse_errors?, :to => 'Subit'
     
     def initialize(search, *args, &block)

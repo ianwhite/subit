@@ -1,18 +1,12 @@
 require 'set'
 require 'logger'
 require 'active_support'
-require 'subit/rule'
-require 'subit/rule_for_original'
-require 'subit/rules'
-require 'subit/version'
-
-Subit::Rule.send :include, Subit::RuleForOriginal
 
 module Subit
   extend self
 
-  def rules(*args, &block)
-    Rules.new(*args, &block)
+  def define(*args, &block)
+    NamedRules.new(*args, &block)
   end
   
   def logger
@@ -42,4 +36,16 @@ module Subit
   def register_rule(klass, name = klass.name.demodulize.underscore)
     rule_classes[name] = klass
   end
+  
+  def rule?(rule)
+    rule_classes.values.detect {|klass| rule.is_a?(klass)}
+  end
 end
+
+require 'subit/rule'
+require 'subit/rule_for_original'
+require 'subit/rules'
+require 'subit/named_rules'
+require 'subit/version'
+
+Subit::Rule.send :include, Subit::RuleForOriginal

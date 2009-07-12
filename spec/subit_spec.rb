@@ -5,8 +5,8 @@ describe Subit do
     Subit::Version::String.should =~ /^\d+\.\d+\.\d+/
   end
   
-  it ".rules should return a Subit::Rules object" do
-    Subit.rules.should be_instance_of(Subit::Rules)
+  it ".define should return a Subit::NamedRules object" do
+    Subit.define.should be_instance_of(Subit::NamedRules)
   end
   
   describe "(errors)" do
@@ -25,12 +25,8 @@ describe Subit do
   end
   
   describe ".rule_classes" do
-    after do
-      Subit.rule_classes.clear
-    end
-    
-    it "should default to {}" do
-      Subit.rule_classes.should == {}
+    before do
+      Subit.stub(:rule_classes).and_return({})
     end
     
     it ".register_rule(klass) should result in {'klass' => klass}" do
@@ -61,8 +57,16 @@ describe Subit do
         Subit.rule_class('foo').should == Subit::Foo
       end
       
-      it ".rule_class(:bar) should non true" do
+      it ".rule_class(:bar) should be non true" do
         (Subit.rule_class(:bar) ? true : false).should == false
+      end
+      
+      it ".rule?(Subit::Foo.new) should be true" do
+        Subit.should be_rule(Subit::Foo.new)
+      end
+      
+      it ".rule?('hello') should be false" do
+        Subit.should_not be_rule('hello')
       end
     end
   end

@@ -8,7 +8,7 @@ module Subit
   module RuleForOriginal
     def self.included(rule)
       rule.class_eval do
-        attr_reader :rule_for_original
+        attr_reader :for_original
         alias_method_chain :initialize, :rule_for_original
       end
     end
@@ -16,7 +16,7 @@ module Subit
     def initialize_with_rule_for_original(search, *args, &block)
       options = args.dup.extract_options!
       if original = options.delete(:original)
-        @rule_for_original = if original.is_a?(Subit::Rule)
+        @for_original = if original.is_a?(Subit::Rule)
           original
         else
           self.class.new(search, original)
