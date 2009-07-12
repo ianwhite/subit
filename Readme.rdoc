@@ -2,9 +2,15 @@
 
 Simple ruby lib for performing substitutions on text.
 
-Includes a DSL for specifying sets of rules.
+The aims are:
 
+ * easy DSL for rule specification
+ * be able to specify sets of rules for different types of input
+ * be able to specify additional rules for replacing content in the original text
+ 
 Uses include pre or post parsing textile to provide custom rules.
+
+== Example
 
   subit = Subit.define do |p|
   
@@ -41,3 +47,9 @@ Uses include pre or post parsing textile to provide custom rules.
   
   # or you can set the eval context on the subit object
   subit.eval_context = @some_object
+  
+  
+== Caveats
+
+This library is non-performant at the moment to say the least.  The plan is to increase the
+performance when the DSL and API is looking good.
