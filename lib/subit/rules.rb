@@ -26,13 +26,15 @@ module Subit
     def add(*args, &block)
       if rule?(args.first)
         rules << args.first
+      elsif klass = rule_class(args.shift)
+        rules << klass.new(*args, &block)
       else
-        rules << rule_class(args.shift).new(*args, &block)
+        raise ArgumentError, "Unknown rule: #{args.first}"
       end
     end
     
-    def respond_to?(method)
-      super(method) || rule_class(method)
+    def respond_to?(method, include_private = false)
+      super(method, include_private) || rule_class(method)
     end
     
   protected
