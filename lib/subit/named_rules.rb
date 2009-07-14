@@ -1,6 +1,11 @@
 module Subit
   # a NamedRules object contains stes of rules that can be stored and parsed by a series of keys
   class NamedRules < Hash
+    def define(*names, &block)
+      Configurator.new(self).define(*names, &block)
+      self
+    end
+    
     # usage:
     #   named_rules.parse(str)                  # => will parse str using root rules
     #   named_rules.parse(str, :html)           # => will parse str using :html rules, and root rules
@@ -33,6 +38,16 @@ module Subit
       super(sanitize_names!(names))
     end
   
+    # return rules that are subsets of the given names
+    def rules_for(names)
+      sanitize_names!(names)
+      keys.sort.select do |key|
+        (key - names).empty? # select keys which are subsets of names
+      end.map do |key|
+        fetch(key) # and retreive the rules for those keys
+      end
+    end
+    
   protected
     def sanitize_names!(names)
       names.map!(&:to_s).uniq!
@@ -43,16 +58,6 @@ module Subit
       options = names.extract_options!
       sanitize_names!(names)
       options.merge(:names => names)
-    end
-    
-    # return rules that are subsets of the given names
-    def rules_for(names)
-      sanitize_names!(names)
-      keys.sort.select do |key|
-        (key - names).empty? # select keys which are subsets of names
-      end.map do |key|
-        fetch(key) # and retreive the rules for those keys
-      end
     end
   end
 end

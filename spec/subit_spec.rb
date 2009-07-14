@@ -6,7 +6,7 @@ describe Subit do
   end
   
   it ".define should return a Subit::NamedRules object" do
-    Subit.define.should be_instance_of(Subit::NamedRules)
+    Subit.define(){}.should be_instance_of(Subit::NamedRules)
   end
   
   describe "(errors)" do

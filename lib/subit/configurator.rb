@@ -1,28 +1,42 @@
 module Subit
   # a configurator object transforms dsl syntax into a series of #add calls on NamedRules and Rules objects
   class Configurator
-    attr_reader :named_rules, :names
+    attr_reader :named_rules, :current_names
     
-    delegate :rule_class, :to => 'Subit'
-    
-    def initialize(named_rules = Subit::NamedRules.new, &block)
+    def initialize(named_rules = Subit::NamedRules.new)
       @named_rules = named_rules
-      @names = []
+      @current_names = []
     end
     
     def define(*new_names, &block)
-      new_names += names
+      new_names += current_names
       named_rules[new_names] || named_rules.add(new_names)
       with_names(new_names, &block)
     end
   
-  protected
+    def respond_to?(method, include_private = false)
+      super || (current_rules && current_rules.can_add_rule?(method))
+    end
+    
+    def current_rules
+      named_rules[current_names]
+    end
+
     def with_names(new_names, &block)
-      old_names = self.names
-      @names = new_names
+      old_names = @current_names
+      @current_names = new_names
       instance_eval(&block)
     ensure
-      @names = old_names
+      @current_names = old_names
+    end
+    
+  protected
+    def method_missing(method, *args, &block)
+      if current_rules && current_rules.can_add_rule?(method)
+        current_rules.add(method, *args, &block)
+      else
+        super
+      end
     end
   end
 end

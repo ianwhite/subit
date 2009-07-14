@@ -2,6 +2,8 @@ module Subit
   class Rule
     Subit.register_rule(self)
     
+    attr_reader :search, :replacement
+    
     delegate :logger, :raise_parse_errors?, :to => 'Subit'
     
     def initialize(search, *args, &block)
@@ -19,7 +21,7 @@ module Subit
     end
   
     def inspect
-      "#<Subit::Rule #{@search.inspect} => #{@replacement.inspect}#{" for_original: #{for_original.inspect}"}>"
+      "#<Subit::Rule #{@search.inspect} => #{@replacement.inspect}>"
     end
     
   protected

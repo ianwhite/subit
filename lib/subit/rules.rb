@@ -26,5 +26,9 @@ module Subit
         raise ArgumentError, "Unknown rule: #{args.first}"
       end
     end
+    
+    def can_add_rule?(rule)
+      rule?(rule) || rule_class(rule)
+    end
   end
 end

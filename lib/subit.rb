@@ -5,7 +5,7 @@ module Subit
   extend self
 
   def define(*args, &block)
-    NamedRules.new(*args, &block)
+    NamedRules.new.define(*args, &block)
   end
   
   def logger
