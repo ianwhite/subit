@@ -6,7 +6,8 @@ The aims are:
 
 * easy DSL for rule specification
 * be able to specify sets of rules for different types of input
-* be able to specify additional rules for replacing content in the original text
+* be able to specify additional rules for replacing content in the original text, this
+  feature is aimed at sanitising the original content while parsing occurs.
  
 Uses include pre or post parsing textile to provide custom rules.
 
@@ -25,7 +26,7 @@ Uses include pre or post parsing textile to provide custom rules.
       end
       h.rule /Product\((\w+)\)/,
         :replace => lambda {|name| product_path(name) },
-        :replace! => lambda {|name| "Product(#{Product.find_by_name(name).id}-#{name})"}
+        :original => lambda {|name| "Product(#{Product.find_by_name(name).id}-#{name})"}
     end
     
   end
@@ -42,11 +43,23 @@ Uses include pre or post parsing textile to provide custom rules.
   # to parse using only {:html, :metric} rules
   subit[:html, :metric].parse("A string")
   
-  # you can pass an object where blocks will be eval'd
+  # you can pass an object where blocks will be instance_exec'd,
+  # if not specified, the block will be called in its original context
   subit.parse("A string", :html, :exec => @some_object)
   
-  # or you can set the eval context on the subit object
-  subit.eval_context = @some_object
+  # you can access the names of the rules used to parse, and any options passed to parse, in a block
+  
+  subit[:html].add :rule, 'a' do |match, options|
+    puts "Inside the 'a' rule: #{options}"
+    "A"
+  end
+  
+  subit.parse 'a', :html, :foo => 'bar'
+  # => 'A'
+  Inside the 'a' rule: {:names => ['html'], :foo => 'bar'}
+  
+  # to parse and replace the original content with any original rules:
+  subit.parse_with_parse_original!(content)
   
 == Caveats
 
