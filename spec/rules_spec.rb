@@ -75,4 +75,23 @@ describe Subit::Rules do
       end
     end
   end
+  
+  describe "+" do
+    before do
+      @r1 = Subit::Rules.new
+      @r1 << (@rule1 = Subit::Rule.new('a'))
+      @r2 = Subit::Rules.new
+      @r2 << (@rule2 = Subit::Rule.new('b'))
+      @add = @r1 + @r2
+    end
+    
+    it "should concat elements" do
+      @add.to_a.should == [@rule1, @rule2]
+    end
+    
+    it "should be new object" do
+      @add.object_id.should_not == @r1.object_id
+      @add.object_id.should_not == @r2.object_id
+    end
+  end
 end

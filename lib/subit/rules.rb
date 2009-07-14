@@ -30,5 +30,9 @@ module Subit
     def can_add_rule?(rule)
       rule?(rule) || rule_class(rule)
     end
+    
+    def +(other)
+      self.dup.concat(other)
+    end
   end
 end
