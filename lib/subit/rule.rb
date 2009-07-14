@@ -19,7 +19,7 @@ module Subit
     end
   
     def inspect
-      "#<Subit::Rule #{@search.inspect} => #{@replacement.inspect}>"
+      "#<Subit::Rule #{@search.inspect} => #{@replacement.inspect}#{" for_original: #{for_original.inspect}"}>"
     end
     
   protected
