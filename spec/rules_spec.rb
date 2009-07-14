@@ -85,6 +85,10 @@ describe Subit::Rules do
       @add = @r1 + @r2
     end
     
+    it "should be a Rules object" do
+      @add.should be_a(Subit::Rules)
+    end
+    
     it "should concat elements" do
       @add.to_a.should == [@rule1, @rule2]
     end
