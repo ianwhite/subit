@@ -5,24 +5,26 @@ describe Subit::NamedRules do
     @named_rules = Subit::NamedRules.new
   end
   
-  describe '#add_rules names' do
-    it "calls #sanitize_names" do
-      @named_rules.should_receive(:sanitize_names).with(['one', :two])
-      @named_rules.add_rules ['one', :two]
+  describe '#add names' do
+    it "calls #sanitize_names!" do
+      @named_rules.should_receive(:sanitize_names!).with(['one', :two])
+      @named_rules.add ['one', :two]
     end
     
-    it "#sanitize_names(ary) should return uniq, sorted, string array" do
-      @named_rules.instance_eval { sanitize_names(['c', :b, 'a', 'b', :a]) }.should == ['a', 'b', 'c']
+    it "#sanitize_names!(ary) make names uniq, sorted, string array" do
+      names = ['c', :b, 'a', 'b', :a]
+      @named_rules.instance_eval { sanitize_names!(names) }.should == ['a', 'b', 'c']
+      names.should == ['a', 'b', 'c']
     end
     
     it "creates a Rules object if it doesn't exist" do
       Subit::Rules.should_receive(:new).and_return(rules = mock)
-      @named_rules.add_rules([]).should == rules
+      @named_rules.add([]).should == rules
       @named_rules.should == {[] => rules}
     end
     
     it "returns existing Rules object if it does exist" do
-      rules = @named_rules.add_rules([:b, :a])
+      rules = @named_rules.add([:b, :a])
       @named_rules['a', 'b'].should == rules
       @named_rules.should == {['a', 'b'] => rules}
     end
@@ -31,10 +33,10 @@ describe Subit::NamedRules do
   describe 'parsing' do
     describe "with :html, :metric, [:html, :metric], and root rules" do
       before do
-        @root_rules = @named_rules.add_rules([])
-        @html_rules = @named_rules.add_rules([:html])
-        @metric_rules = @named_rules.add_rules([:metric])
-        @html_metric_rules = @named_rules.add_rules([:html, :metric])
+        @root_rules = @named_rules.add([])
+        @html_rules = @named_rules.add([:html])
+        @metric_rules = @named_rules.add([:metric])
+        @html_metric_rules = @named_rules.add([:html, :metric])
       end
     
       it "#parse should parse using root rules" do
@@ -48,7 +50,7 @@ describe Subit::NamedRules do
         @named_rules.parse('start', :html).should == 'html'
       end
             
-      it "#parse('..., :metric, :html) should parse using all rules in order" do
+      it "#parse(..., :metric, :html) should parse using all rules in order" do
         @root_rules.should_receive(:parse).with('start', hash_including(:names => ['html', 'metric'])).and_return('root')
         @html_rules.should_receive(:parse).with('root', hash_including(:names => ['html', 'metric'])).and_return('html')
         @html_metric_rules.should_receive(:parse).with('html', hash_including(:names => ['html', 'metric'])).and_return('html metric')

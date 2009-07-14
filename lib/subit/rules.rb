@@ -9,15 +9,15 @@ module Subit
     
     # parses input using all rules in rules, also modifies the
     # input according to any 'original' rules defined.
-    def parse!(content, options = {})
-      inject(options[:parsed] || content) do |parsed, rule|
+    def parse_with_parse_original!(content, options = {})
+      inject(options[:parsed] || content.dup) do |parsed, rule|
         rule.for_original.parse!(content, options) if rule.for_original
         rule.parse(parsed, options)
       end
     end
     
     # add a rule to the set of rules, add either a rule object, or a rule name with args
-    def add_rule(*args, &block)
+    def add(*args, &block)
       if rule?(args.first)
         self << args.first
       elsif klass = rule_class(args.shift)

@@ -1,4 +1,3 @@
-require 'set'
 require 'logger'
 require 'active_support'
 
