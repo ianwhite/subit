@@ -30,13 +30,13 @@ describe Subit::NamedRules do
     it "creates a Rules object if it doesn't exist" do
       Subit::Rules.should_receive(:new).and_return(rules = mock)
       @named_rules.add([]).should == rules
-      @named_rules.should == {[] => rules}
+      @named_rules.to_hash.should == {[] => rules}
     end
     
     it "returns existing Rules object if it does exist" do
       rules = @named_rules.add([:b, :a])
       @named_rules['a', 'b'].should == rules
-      @named_rules.should == {['a', 'b'] => rules}
+      @named_rules.to_hash.should == {['a', 'b'] => rules}
     end
   end
   
@@ -63,9 +63,9 @@ describe Subit::NamedRules do
       it "#parse(..., :metric, :html) should parse using all rules in order" do
         @root_rules.should_receive(:parse).with('start', :names => ['html', 'metric']).and_return('root')
         @html_rules.should_receive(:parse).with('root', :names => ['html', 'metric']).and_return('html')
-        @html_metric_rules.should_receive(:parse).with('html', :names => ['html', 'metric']).and_return('html metric')
-        @metric_rules.should_receive(:parse).with('html metric', :names => ['html', 'metric']).and_return('metric')
-        @named_rules.parse('start', :metric, :html).should == 'metric'
+        @metric_rules.should_receive(:parse).with('html', :names => ['html', 'metric']).and_return('metric')
+        @html_metric_rules.should_receive(:parse).with('metric', :names => ['html', 'metric']).and_return('html metric')
+        @named_rules.parse('start', :metric, :html).should == 'html metric'
       end
       
       it "#parse_with_parse_original!(...) should parse_with_parse_original! on root rules" do
@@ -83,9 +83,9 @@ describe Subit::NamedRules do
     end
     
     it "should coallesce rules" do
+      @addition[:html].should == @nr1[:html] + @nr2[:html]
       @addition.keys.should == [['html'], []]
       @addition[].should == @nr2[]
-      @addition[:html].should == @nr1[:html] + @nr2[:html]
     end
   end
 end

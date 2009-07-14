@@ -48,15 +48,18 @@ module Subit
     # return rules that are subsets of the given names
     def rules_for(names)
       sanitize_names!(names)
-      keys.sort.select do |key|
-        (key - names).empty? # select keys which are subsets of names
-      end.map do |key|
-        fetch(key) # and retreive the rules for those keys
+      keys.select do |k|
+        (k - names).empty? # select keys which are subsets of names
+      end.map do |k|
+        self[k]
       end
     end
     
     def +(other)
-      addition = self.dup
+      addition = NamedRules.new
+      self.each do |key, rules|
+        addition[key] = rules
+      end
       other.each do |key, rules|
         if addition[key]
           addition[key] += rules
