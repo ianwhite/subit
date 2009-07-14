@@ -1,6 +1,12 @@
 module Subit
   # a NamedRules object contains stes of rules that can be stored and parsed by a series of keys
   class NamedRules < Hash
+    # optionally define some rules on custruction
+    def initialize(*names, &block)
+      define(*names, &block) if block_given?
+    end
+    
+    # define this object using the passed block
     def define(*names, &block)
       Configurator.new(self).define(*names, &block)
       self
@@ -46,6 +52,18 @@ module Subit
       end.map do |key|
         fetch(key) # and retreive the rules for those keys
       end
+    end
+    
+    def +(other)
+      addition = self.dup
+      other.each do |key, rules|
+        if addition[key]
+          addition[key] += rules
+        else
+          addition[key] = rules
+        end
+      end
+      addition
     end
     
   protected

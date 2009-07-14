@@ -4,8 +4,9 @@ require 'active_support'
 module Subit
   extend self
 
+  # return a new Subit::NamedRules object, pass a block to define rules and names
   def define(*args, &block)
-    NamedRules.new.define(*args, &block)
+    NamedRules.new(*args, &block)
   end
   
   def logger

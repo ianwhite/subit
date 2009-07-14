@@ -74,4 +74,18 @@ describe Subit::NamedRules do
       end
     end
   end
+
+  describe '+' do
+    before do
+      @nr1 = Subit::NamedRules.new.define(:html) { rule 'a', 'b' }
+      @nr2 = Subit::NamedRules.new.define() { rule 'c', 'd'; define(:html) { rule 'e', 'f' } }
+      @addition = @nr1 + @nr2
+    end
+    
+    it "should coallesce rules" do
+      @addition.keys.should == [[], ['html']]
+      @addition[].should == @nr2[]
+      @addition[:html].should == @nr1[:html] + @nr2[:html]
+    end
+  end
 end
