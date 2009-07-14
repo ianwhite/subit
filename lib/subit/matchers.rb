@@ -8,7 +8,8 @@ module Subit
       end
     
       def matches?(parser)
-        parser.parse(@from, *@names) == @to
+        @result = parser.parse(@from, *@names)
+        @result == @to
       end
 
       def description
@@ -16,11 +17,11 @@ module Subit
       end
 
       def failure_message
-        " expected '#{@from}' to parse as '#{@to}' #{using_names}, but it didn't"
+        " expected '#{@from}' to parse as '#{@to}' #{using_names}, but it parsed as '#{@result}'"
       end
 
       def negative_failure_message
-        " expected '#{@from}' not to parse in '#{@to}' #{using_names}, but it did"
+        " expected '#{@from}' not to parse as '#{@to}' #{using_names}, but it did"
       end
     
       def using_names
