@@ -38,21 +38,21 @@ describe Subit::NamedRules do
       end
     
       it "#parse should parse using root rules" do
-        @root_rules.should_receive(:parse).with('start', :names => []).and_return('root')
+        @root_rules.should_receive(:parse).with('start', hash_including(:names => [])).and_return('root')
         @named_rules.parse('start').should == 'root'
       end
       
-      it "#parse(..., :html) should parse using root rules, and :html rules" do
-        @root_rules.should_receive(:parse).with('start', :names => ['html']).and_return('root')
-        @html_rules.should_receive(:parse).with('root', :names => ['html']).and_return('html')
+      it "#parse(..., :html) should parse using root rules, then :html rules" do
+        @root_rules.should_receive(:parse).with('start', hash_including(:names => ['html'])).and_return('root')
+        @html_rules.should_receive(:parse).with('root', hash_including(:names => ['html'])).and_return('html')
         @named_rules.parse('start', :html).should == 'html'
       end
             
-      it "#parse('..., :metric, :html) should parse using all rules" do
-        @root_rules.should_receive(:parse).with('start', :names => ['html', 'metric']).and_return('root')
-        @html_rules.should_receive(:parse).with('root', :names => ['html', 'metric']).and_return('html')
-        @html_metric_rules.should_receive(:parse).with('html', :names => ['html', 'metric']).and_return('html metric')
-        @metric_rules.should_receive(:parse).with('html metric', :names => ['html', 'metric']).and_return('metric')
+      it "#parse('..., :metric, :html) should parse using all rules in order" do
+        @root_rules.should_receive(:parse).with('start', hash_including(:names => ['html', 'metric'])).and_return('root')
+        @html_rules.should_receive(:parse).with('root', hash_including(:names => ['html', 'metric'])).and_return('html')
+        @html_metric_rules.should_receive(:parse).with('html', hash_including(:names => ['html', 'metric'])).and_return('html metric')
+        @metric_rules.should_receive(:parse).with('html metric', hash_including(:names => ['html', 'metric'])).and_return('metric')
         @named_rules.parse('start', :metric, :html).should == 'metric'
       end
     end
