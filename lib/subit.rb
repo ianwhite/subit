@@ -46,5 +46,6 @@ require 'subit/rule_for_original'
 require 'subit/rules'
 require 'subit/named_rules'
 require 'subit/version'
+require 'subit/configurator'
 
 Subit::Rule.send :include, Subit::RuleForOriginal
