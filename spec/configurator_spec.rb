@@ -86,8 +86,7 @@ describe Subit::Configurator do
     
     describe "define() { rule('a', 'b'); define(:html) { rule('c'){ 'd' } } }" do
       before do
-        d_block = lambda { 'd' }
-        @d_block = d_block # why? because define's block is ieval'd so we need local var
+        d_block = @d_block =lambda { 'd' }
         
         @conf.define do
           rule 'a', 'b'
@@ -111,6 +110,20 @@ describe Subit::Configurator do
         @conf.named_rules[:html].length.should == 1
         @conf.named_rules[:html].first.search.should == 'c'
         @conf.named_rules[:html].first.replacement.should == @d_block
+      end
+    end
+    
+    describe "define() { add <rule> }" do
+      before do
+        @rule = rule = Subit::Rule.new('a', 'b')
+        
+        @conf.define() do
+          add rule
+        end
+      end
+      
+      it "named_rules[] should contain <rule>" do
+        @conf.named_rules[].to_a.should == [@rule]
       end
     end
   end

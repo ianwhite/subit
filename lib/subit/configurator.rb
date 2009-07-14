@@ -14,6 +14,10 @@ module Subit
       with_names(new_names, &block)
     end
   
+    def add(*args, &block)
+      current_rules.add(*args, &block)
+    end
+      
     def respond_to?(method, include_private = false)
       super || (current_rules && current_rules.can_add_rule?(method))
     end
