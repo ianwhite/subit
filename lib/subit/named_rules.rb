@@ -1,8 +1,9 @@
 module Subit
   # a NamedRules object contains stes of rules that can be stored and parsed by a series of keys
-  class NamedRules < Hash
+  class NamedRules < ActiveSupport::OrderedHash
     # optionally define some rules on custruction
     def initialize(*names, &block)
+      super()
       define(*names, &block) if block_given?
     end
     
@@ -35,7 +36,7 @@ module Subit
     
     # add a Rules object for a names array
     def add(names, rules = Rules.new)
-      store(sanitize_names!(names), rules)
+      self[sanitize_names!(names)] = rules
     end
     
     # access the Rules object - can call with splat, i.e. r[:html, :metric]

@@ -83,7 +83,7 @@ describe Subit::NamedRules do
     end
     
     it "should coallesce rules" do
-      @addition.keys.should == [[], ['html']]
+      @addition.keys.should == [['html'], []]
       @addition[].should == @nr2[]
       @addition[:html].should == @nr1[:html] + @nr2[:html]
     end
