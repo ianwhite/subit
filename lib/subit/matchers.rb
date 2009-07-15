@@ -1,5 +1,3 @@
-require 'subit'
-
 module Subit
   module Matchers
     class Parse
