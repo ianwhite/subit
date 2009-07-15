@@ -9,7 +9,12 @@ describe Subit::Configurator do
   it ".new() should create a NamedRules object on demand" do
     Subit::Configurator.new.named_rules.should be_a(Subit::NamedRules)
   end
-    
+  
+  it "#define() should return the named_rules object" do
+    @conf = Subit::Configurator.new
+    @conf.define(){}.should == @conf.named_rules
+  end
+  
   describe "on a NamedRules" do
     before do
       @named_rules = Subit::NamedRules.new

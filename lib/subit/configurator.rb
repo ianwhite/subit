@@ -12,6 +12,7 @@ module Subit
       new_names += current_names
       named_rules[new_names] || named_rules.add(new_names)
       with_names(new_names, &block)
+      named_rules
     end
   
     def add(*args, &block)

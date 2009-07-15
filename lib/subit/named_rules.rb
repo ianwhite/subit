@@ -10,7 +10,6 @@ module Subit
     # define this object using the passed block
     def define(*names, &block)
       Configurator.new(self).define(*names, &block)
-      self
     end
     
     # usage:
