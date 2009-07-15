@@ -25,6 +25,12 @@ describe Subit::Rules do
     end
   end
   
+  it "#can_add_rule? should return false if argument is neither a rule symbol nor a rule object" do
+    @rules.should_receive(:rule?).with('foo').and_return(false)
+    @rules.should_receive(:rule_class).with('foo').and_return(false)
+    @rules.can_add_rule?('foo').should == false
+  end
+  
   describe "Use case #1" do
     before do
       @content = 'hello & goodbye'

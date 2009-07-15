@@ -18,9 +18,13 @@ module Subit
     def add(*args, &block)
       current_rules.add(*args, &block)
     end
-      
+    
+    def rule(*args, &block)
+      current_rules.add(:rule, *args, &block)
+    end
+    
     def respond_to?(method, include_private = false)
-      super || (current_rules && current_rules.can_add_rule?(method))
+      super || can_add_rule?(method)
     end
     
     def current_rules
@@ -35,13 +39,14 @@ module Subit
       @current_names = old_names
     end
     
+    def can_add_rule?(method)
+      current_rules && current_rules.can_add_rule?(method)
+    end
+    
   protected
     def method_missing(method, *args, &block)
-      if current_rules && current_rules.can_add_rule?(method)
-        current_rules.add(method, *args, &block)
-      else
-        super
-      end
+      return add(method, *args, &block) if can_add_rule?(method)
+      super
     end
   end
 end
