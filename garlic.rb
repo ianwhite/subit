@@ -13,7 +13,7 @@ garlic do
   ['2-3-stable', '2-2-stable', '2-1-stable'].each do |rails|
     
     # declare how to prepare, and run each CI target
-    target "Rails: #{rails}", :branch => "origin/#{rails}" do
+    target rails, :branch => "origin/#{rails}" do
       prepare do
         plugin "subit", :clone => true # so we can work in targets
         plugin "rspec"
