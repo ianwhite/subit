@@ -2,7 +2,7 @@ module Subit
   module Matchers
     class Parse
       def initialize(from, to, names = [])
-        @from, @to, @names = from, to, names
+        @from, @to, @names = from, to, Array(names)
       end
     
       def matches?(parser)
