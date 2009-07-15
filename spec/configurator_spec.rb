@@ -39,11 +39,9 @@ describe Subit::Configurator do
     end
     
     it "define(&block) should not create a rules object if it exists" do
-      @conf.define() {}
-      rules = @conf.named_rules[]
+      rules = @conf.define(){}
       Subit::Rules.should_not_receive(:new)
-      @conf.define() {}
-      @conf.named_rules[].should == rules
+      @conf.define(){}.should == rules
     end
     
     it "#current_rules returns current rules object" do
@@ -91,7 +89,7 @@ describe Subit::Configurator do
     
     describe "define() { rule('a', 'b'); define(:html) { rule('c'){ 'd' } } }" do
       before do
-        d_block = @d_block =lambda { 'd' }
+        d_block = @d_block = lambda { 'd' }
         
         @conf.define do
           rule 'a', 'b'
