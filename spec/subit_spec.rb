@@ -9,6 +9,10 @@ describe Subit do
     Subit.define(){}.should be_instance_of(Subit::NamedRules)
   end
   
+  it ".define(){ define(:foo){} } should return a Subit::NamedRules object" do
+    Subit.define(){ define(:foo){} }.should be_instance_of(Subit::NamedRules)
+  end
+  
   describe "(errors)" do
     before { @old = Subit.raise_parse_errors? }
 
