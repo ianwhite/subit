@@ -3,7 +3,7 @@ module Subit
   class NamedRules < ActiveSupport::OrderedHash
     # optionally define some rules on custruction
     def initialize(*names, &block)
-      super()
+      super(&nil)
       define(*names, &block) if block_given?
     end
     
