@@ -1,5 +1,5 @@
 module Subit
-  # a NamedRules object contains stes of rules that can be stored and parsed by a series of keys
+  # a NamedRules object contains sets of rules that can be stored and parsed by a series of keys
   class NamedRules < ActiveSupport::OrderedHash
     # optionally define some rules on custruction
     def initialize(*names, &block)

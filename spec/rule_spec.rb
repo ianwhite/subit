@@ -54,21 +54,26 @@ describe "@content is 'I search and search', " do
       it_should_behave_like "Rule with search: /[ae]/, replace: '[$0]'"
     end
     
-    describe ".new('search') {|match, options| \"\#{self.class == String ? 'String' : 'NOT'}\#{options[:thing]}\"}" do
-      before do
-        @rule = Subit::Rule.new('search') {|match, options| "#{self.class == String ? 'String' : 'NOT'}#{options[:thing]}"}
+    describe "execution context" do
+      it "can be set on a rule" do
+        rule = Subit::Rule.new('search', :exec => "foo", :replace => "replace")
+        rule.exec.should == "foo"
       end
       
-      it "#parse(@content) should == 'I NOT and NOT'" do
-        @rule.parse(@content).should == "I NOT and NOT"
-      end
-
-      it "#parse(@content, :thing => '!') should == 'I NOT! and NOT!'" do
-        @rule.parse(@content, :thing => '!').should == "I NOT! and NOT!"
+      it "when set on a rule, block is executed within that context" do
+        rule = Subit::Rule.new('search', :exec => "foo") { self == "foo" ? "IS FOO" : "FAIL" }
+        rule.parse('search').should == "IS FOO"
       end
       
-      it "#parse(@content, :exec => 'a string') should == 'I String and String'" do
-        @rule.parse(@content, :exec => 'a string').should == "I String and String"
+      it "can be overriden by passing parse :exec to parse" do
+        rule = Subit::Rule.new('search', :exec => "foo") { self == "foo" ? "IS FOO" : "IS NOT FOO" }
+        rule.parse('search', :exec => 'bar').should == "IS NOT FOO"
+      end
+      
+      it "when not set, is the block's execution context'" do
+        local_foo = "foo"
+        rule = Subit::Rule.new('search') { local_foo }
+        rule.parse('search').should == "foo"
       end
     end
     

@@ -2,7 +2,7 @@ module Subit
   class Rule
     Subit.register_rule(self)
     
-    attr_reader :search, :replacement
+    attr_reader :search, :replacement, :exec
     
     delegate :logger, :raise_parse_errors?, :to => 'Subit'
     
@@ -10,6 +10,7 @@ module Subit
       options = args.extract_options!
       @search = search
       @replacement = args.first || options[:replace] || block
+      @exec = options[:exec]
     end
       
     def parse(content, options = {})
@@ -50,8 +51,8 @@ module Subit
     def replace_with_proc(matchdata, options)
       args = matchdata.to_a
       args += [options] if (args.size < @replacement.arity || @replacement.arity < 0)
-      if options[:exec]
-        options[:exec].instance_exec(*args, &@replacement)
+      if exec = (options[:exec] || self.exec)
+        exec.instance_exec(*args, &@replacement)
       else
         @replacement.call(*args)
       end
