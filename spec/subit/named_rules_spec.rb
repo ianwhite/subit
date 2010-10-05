@@ -87,5 +87,12 @@ describe Subit::NamedRules do
       @addition.keys.should == [['html'], []]
       @addition[].should == @nr2[]
     end
+    
+    it "should transfer exec of all rules to new named_rules" do
+      rules = @addition.values.flatten
+      rules[0].exec.should == @addition
+      rules[1].exec.should == @addition
+      rules[2].exec.should == @addition
+    end
   end
 end

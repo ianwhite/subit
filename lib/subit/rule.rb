@@ -26,6 +26,10 @@ module Subit
       "#<Subit::Rule #{@search.inspect} => #{@replacement.inspect}>"
     end
     
+    def ==(other)
+      [@search, @replacement] == [other.search, other.replacement]
+    end
+    
   protected
     def perform_replace(matchdata, options)
       case @replacement

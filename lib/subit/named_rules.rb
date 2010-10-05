@@ -57,14 +57,11 @@ module Subit
     def +(other)
       addition = NamedRules.new
       self.each do |key, rules|
-        addition[key] = rules
+        addition[key] = rules.transfer_exec(self, addition)
       end
       other.each do |key, rules|
-        if addition[key]
-          addition[key] += rules
-        else
-          addition[key] = rules
-        end
+        addition[key] ||= Rules.new
+        addition[key] += rules.transfer_exec(other, addition)
       end
       addition
     end
