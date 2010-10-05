@@ -1,10 +1,18 @@
 module Subit
   # a NamedRules object contains sets of rules that can be stored and parsed by a series of keys
   class NamedRules < ActiveSupport::OrderedHash
+    attr_accessor :name
+    
     # optionally define some rules on custruction
     def initialize(*names, &block)
       super(&nil)
+      options = names.extract_options!
+      @name = options[:name]
       define(*names, &block) if block_given?
+    end
+    
+    def to_s
+      "<#{@name || 'Subit::NamedRules'} #{keys.inspect}>"
     end
     
     # define this object using the passed block

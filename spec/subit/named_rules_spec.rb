@@ -5,6 +5,11 @@ describe Subit::NamedRules do
     @named_rules = Subit::NamedRules.new
   end
   
+  it ".new(:name => 'foo') shoudl set name" do
+    named_rules = Subit::NamedRules.new(:name => 'foo')
+    named_rules.name.should == 'foo'
+  end
+  
   it "#define(*names, &block) should create configurator on self" do
     Subit::Configurator.should_receive(:new).with(@named_rules).and_return(conf = mock)
     conf.should_receive(:define).with('one', 'two')
