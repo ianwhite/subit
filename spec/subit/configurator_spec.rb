@@ -50,6 +50,12 @@ describe Subit::Configurator do
       @conf.instance_eval { current_rules }.should == rules
     end
     
+    it "#include <Module> includes into the named_rules singleton_class" do
+      mixin = Module.new
+      @conf.include mixin
+      @conf.named_rules.singleton_class.included_modules.should include(mixin)
+    end
+    
     describe "define() { define(:one) { define(:two) {}}; define(:zap) {}; define('one') {}}" do
       before do
         @conf.define do 

@@ -94,5 +94,14 @@ describe Subit::NamedRules do
       rules[1].exec.should == @addition
       rules[2].exec.should == @addition
     end
+    
+    it "should transfer included modules to new named_rules" do
+      mixin1 = Module.new
+      mixin2 = Module.new
+      @nr1.singleton_class.send :include, mixin1
+      @nr2.singleton_class.send :include, mixin2
+      @addition = @nr1 + @nr2
+      @addition.singleton_class.included_modules.should include(mixin1, mixin2)
+    end
   end
 end

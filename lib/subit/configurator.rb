@@ -8,6 +8,10 @@ module Subit
       @current_names = []
     end
     
+    def include(*args)
+      named_rules.singleton_class.send :include, *args
+    end
+    
     def define(*new_names, &block)
       new_names += current_names
       named_rules[new_names] || named_rules.add(new_names)

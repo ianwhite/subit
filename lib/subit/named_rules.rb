@@ -63,6 +63,8 @@ module Subit
         addition[key] ||= Rules.new
         addition[key] += rules.transfer_exec(other, addition)
       end
+      mixins = (self.singleton_class.included_modules | other.singleton_class.included_modules) - addition.singleton_class.included_modules
+      addition.singleton_class.send :include, *mixins if mixins.any?
       addition
     end
     
