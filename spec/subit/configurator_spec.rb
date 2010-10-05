@@ -79,7 +79,7 @@ describe Subit::Configurator do
     it "should forward missing methods that can be added to current_rules object" do
       @conf.stub(:current_rules).and_return(mock)
       @conf.current_rules.should_receive(:can_add_rule?).with(:foo).and_return(true)
-      @conf.current_rules.should_receive('add').with(:foo, 'one', 'two')
+      @conf.current_rules.should_receive('add').with(:foo, 'one', 'two', :exec => @conf.named_rules)
       @conf.foo 'one', 'two'
     end
     
@@ -114,6 +114,11 @@ describe Subit::Configurator do
         @conf.named_rules[:html].first.search.should == 'c'
         @conf.named_rules[:html].first.replacement.should == @d_block
       end
+      
+      it "the rules should have exec of the named_rules object" do
+        @conf.named_rules[].first.exec.should == @conf.named_rules
+        @conf.named_rules[:html].first.exec.should == @conf.named_rules
+      end
     end
     
     describe "define() { add <rule> }" do
@@ -127,6 +132,10 @@ describe Subit::Configurator do
       
       it "named_rules[] should contain <rule>" do
         @conf.named_rules[].to_a.should == [@rule]
+      end
+      
+      it "the rules should have exec of the named_rules object" do
+        @conf.named_rules[].first.exec.should == @conf.named_rules
       end
     end
   end

@@ -2,7 +2,8 @@ module Subit
   class Rule
     Subit.register_rule(self)
     
-    attr_reader :search, :replacement, :exec
+    attr_reader :search, :replacement
+    attr_accessor :exec
     
     delegate :logger, :raise_parse_errors?, :to => 'Subit'
     

@@ -16,11 +16,17 @@ module Subit
     end
   
     def add(*args, &block)
-      current_rules.add(*args, &block)
+      options = args.extract_options!
+      if args.first.is_a?(Rule)
+        args.first.exec ||= named_rules
+      else
+        options[:exec] ||= named_rules
+      end
+      current_rules.add(*args + [options], &block)
     end
     
     def rule(*args, &block)
-      current_rules.add(:rule, *args, &block)
+      add(:rule, *args, &block)
     end
     
     def respond_to?(method, include_private = false)
