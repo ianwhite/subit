@@ -13,6 +13,11 @@ describe Subit do
     Subit.define(){ define(:foo){} }.should be_instance_of(Subit::NamedRules)
   end
   
+  it ".define(:name => 'foo'){ define(:foo){} } should name the Subit::NamedRules object" do
+    rules = Subit.define(:name => 'foo'){ define(:foo){}; define(:foo, :bar){} }
+    rules.to_s.should == "<foo [foo], [bar,foo]>"
+  end
+  
   describe "(errors)" do
     before { @old = Subit.raise_parse_errors? }
 

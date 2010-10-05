@@ -6,18 +6,18 @@ module Subit
     # optionally define some rules on custruction
     def initialize(*names, &block)
       super(&nil)
-      options = names.extract_options!
-      @name = options[:name]
-      define(*names, &block) if block_given?
+      define(*names, &block)
     end
     
     def to_s
-      "<#{@name || 'Subit::NamedRules'} #{keys.inspect}>"
+      "<#{@name || 'Subit::NamedRules'} #{keys.map{|k| k.any? && "[#{k.join(',')}]"}.reject(&:blank?).join(', ')}>"
     end
     
     # define this object using the passed block
     def define(*names, &block)
-      Configurator.new(self).define(*names, &block)
+      options = names.extract_options!
+      @name = options[:name]
+      Configurator.new(self).define(*names, &block) if block_given?
     end
     
     # usage:
