@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require 'spec_helper'
 
 describe Subit::Configurator do
   it ".new(named_rules) should store the named_rules object" do

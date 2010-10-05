@@ -44,7 +44,7 @@ module Subit
     
     def replace_with_string(matchdata, options)
       result = @replacement.dup
-      matchdata.to_a.each_with_index {|match, i| result.gsub!("$#{i}", match)}
+      matchdata.to_a.each_with_index {|match, i| result.gsub!("\\#{i}", match)}
       result
     end
     
