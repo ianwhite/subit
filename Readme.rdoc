@@ -24,9 +24,7 @@ Uses include pre or post parsing textile to provide custom rules.
       h.rule /#(\d+)/ do |ticket|
         ticket_path(ticket)
       end
-      h.rule /Product\((\w+)\)/,
-        :replace => lambda {|name| product_path(name) },
-        :original => lambda {|name| "Product(#{Product.find_by_name(name).id}-#{name})"}
+      h.rule /Product\((\w+)\)/, :replace => lambda {|name| product_path(name) },
     end
     
   end
@@ -57,9 +55,6 @@ Uses include pre or post parsing textile to provide custom rules.
   subit.parse 'a', :html, :foo => 'bar'
   # => 'A'
   Inside the 'a' rule: {:names => ['html'], :foo => 'bar'}
-  
-  # to parse and replace the original content with any original rules:
-  subit.parse_with_parse_original!(content)
   
 == Caveats
 

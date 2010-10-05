@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require 'spec_helper'
 
 describe Subit::Rules do
   before do
@@ -45,40 +45,6 @@ describe Subit::Rules do
     it 'should apply all rules with #parse(content)' do
       @rules.parse(@content).should == 'hi and bye bye'
       @content.should == 'hello & goodbye'
-    end
-  
-    it 'should apply all rules and modify original with #parse_with_parse_original!(@content)' do
-      @rules.parse_with_parse_original!(@content).should == 'hi and bye bye'
-      @content.should == 'hello & GOODBYE'
-    end
-  end
-  
-  describe "Use case #2" do
-    before do
-      @content = 'start'
-      @rules = Subit::Rules.new
-      @rules.add :rule, 'a', '[a]', :original => 'A'
-    end
-    
-    it "#parse_with_parse_original!(content) should modify content using :original rules" do
-      @rules.parse_with_parse_original!(@content).should == 'st[a]rt'
-      @content.should == 'stArt'
-    end
-
-    describe "(and a rule based on options)" do
-      before do
-        @rules.add :rule, 't', '[t]', :original => lambda {|match, options| options[:upcase_t] ? 'T' : match}
-      end
-      
-      it "#parse_with_parse_original!(content) should modify content using original rules" do
-        @rules.parse_with_parse_original!(@content).should == 's[t][a]r[t]'
-        @content.should == 'stArt'
-      end
-      
-      it "#parse_with_parse_original!(content, <options>) should modify content using options" do
-        @rules.parse_with_parse_original!(@content, :upcase_t => true).should == 's[t][a]r[t]'
-        @content.should == 'sTArT'
-      end
     end
   end
   
