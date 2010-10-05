@@ -15,7 +15,7 @@ Uses include pre or post parsing textile to provide custom rules.
 
   subit = Subit.define do |p|
   
-    h.rule "init", "isn't it", :original => "isn't it"
+    h.rule "init", "isn't it"
   
     p.define :html do |h|
       h.rule '£', '&pound;'
