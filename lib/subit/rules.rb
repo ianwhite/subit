@@ -41,9 +41,7 @@ module Subit
     
     # return a duplicate of this set of rules, with exec transferred from key to value
     def transfer_exec(from, to)
-      map do |rule|
-        rule.dup.tap {|r| r.exec = to if r.exec == from}
-      end
+      dup.tap {|rules| rules.each {|r| r.exec = to if r.exec == from} }
     end
   end
 end
