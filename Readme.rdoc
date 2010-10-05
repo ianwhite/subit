@@ -20,7 +20,7 @@ Uses include pre or post parsing textile to provide custom rules.
     p.define :html do |h|
       h.rule '£', '&pound;'
       h.rule '(euro)', '&#8364;'
-      h.rule '/foo\d/, 'bar$1'
+      h.rule '/foo\d/, 'bar\\1'
       h.rule /#(\d+)/ do |ticket|
         ticket_path(ticket)
       end
@@ -58,5 +58,5 @@ Uses include pre or post parsing textile to provide custom rules.
   
 == Caveats
 
-This library is non-performant at the moment to say the least.  The plan is to increase the
+This library is not super fast at the moment.  The plan is to increase the
 performance when the DSL and API is looking good.
