@@ -54,7 +54,7 @@ module Subit
     end
     
     def replace_with_proc(matchdata, options)
-      args = matchdata.to_a
+      args = matchdata.to_a[1..-1]
       args += [options] if (args.size < @replacement.arity || @replacement.arity < 0)
       if exec = (options[:exec] || self.exec)
         exec.instance_exec(*args, &@replacement)
